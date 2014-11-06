@@ -1,25 +1,28 @@
 (function(d) {
   var mouseX = 0;
   var mouseY = 0;
-  var isShiftClickOnce = false;
+  var deleteTimeout;
   var SHIFT_THRESHOLD_MS = 500;
+  var DELETE_DELAY = 1000;
 
   d.addEventListener('mousemove', function(e) { mouseX = e.x; mouseY = e.y; });
   d.body.addEventListener('keydown', function(e) {
     if (e.keyCode === 16) {
-      if (d.isShiftClickOnce) {
-        e.preventDefault();
+      el = d.elementFromPoint(mouseX, mouseY);
 
-        delete d.isShiftClickOnce;
-        el = d.elementFromPoint(mouseX, mouseY);
+      el.classList.add('about-to-delete');
+
+      deleteTimeout = setTimeout(function() {
         el.parentElement.removeChild(el);
-      } else {
-        d.isShiftClickOnce = true;
+      }, DELETE_DELAY);
 
-        window.setTimeout(function() {
-          delete d.isShiftClickOnce;
-        }, SHIFT_THRESHOLD_MS);
-      }
+      d.addEventListener('keyup', function(e) {
+        if (e.keyCode === 16) {
+          el.classList.remove('about-to-delete');
+          clearTimeout(deleteTimeout);
+        }
+      });
     }
   });
+
 })(document);

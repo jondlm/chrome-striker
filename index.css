@@ -1,0 +1,9 @@
+.about-to-delete {
+	outline: 8px solid #E82C0C;
+	-webkit-animation: 1s boom;
+}
+
+@-webkit-keyframes boom {
+	0% {opacity: 1}
+	100% {opacity: 0}
+}
